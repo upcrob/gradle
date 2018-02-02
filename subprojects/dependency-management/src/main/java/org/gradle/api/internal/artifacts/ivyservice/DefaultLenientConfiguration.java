@@ -171,8 +171,8 @@ public class DefaultLenientConfiguration implements LenientConfiguration, Visite
     private Set<DependencyGraphNodeResult> getFirstLevelNodes(Spec<? super Dependency> dependencySpec) {
         Set<DependencyGraphNodeResult> matches = new LinkedHashSet<DependencyGraphNodeResult>();
         TransientConfigurationResults graphResults = loadTransientGraphResults(getSelectedArtifacts());
-        for (Map.Entry<Dependency, DependencyGraphNodeResult> entry : graphResults.getFirstLevelDependencies().entrySet()) {
-            if (dependencySpec.isSatisfiedBy(entry.getKey())) {
+        for (Map.Entry<Object, DependencyGraphNodeResult> entry : graphResults.getFirstLevelDependencies().entrySet()) {
+            if (((Spec<Object>) dependencySpec).isSatisfiedBy(entry.getKey())) {
                 matches.add(entry.getValue());
             }
         }
