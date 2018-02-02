@@ -16,7 +16,6 @@
 
 package org.gradle.internal.component.local.model;
 
-import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.component.ComponentSelector;
 import org.gradle.api.internal.attributes.AttributesSchemaInternal;
 import org.gradle.api.internal.attributes.ImmutableAttributes;
@@ -31,9 +30,9 @@ import java.util.List;
 
 public class DslOriginDependencyMetadataWrapper implements DslOriginDependencyMetadata, LocalOriginDependencyMetadata {
     private final LocalOriginDependencyMetadata delegate;
-    private final Dependency source;
+    private final Object source;
 
-    public DslOriginDependencyMetadataWrapper(LocalOriginDependencyMetadata delegate, Dependency source) {
+    public DslOriginDependencyMetadataWrapper(LocalOriginDependencyMetadata delegate, Object source) {
         this.delegate = delegate;
         this.source = source;
     }
@@ -44,7 +43,7 @@ public class DslOriginDependencyMetadataWrapper implements DslOriginDependencyMe
     }
 
     @Override
-    public Dependency getSource() {
+    public Object getSource() {
         return source;
     }
 

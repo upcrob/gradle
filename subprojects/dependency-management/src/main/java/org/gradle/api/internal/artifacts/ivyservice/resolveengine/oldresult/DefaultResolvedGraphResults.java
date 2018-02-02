@@ -16,20 +16,18 @@
 
 package org.gradle.api.internal.artifacts.ivyservice.resolveengine.oldresult;
 
-import org.gradle.api.artifacts.Dependency;
-
 import java.util.Map;
 
 public class DefaultResolvedGraphResults implements ResolvedGraphResults {
-    private final Map<Long, Dependency> modulesMap;
+    private final Map<Long, Object> modulesMap;
 
-    public DefaultResolvedGraphResults(Map<Long, Dependency> modulesMap) {
+    public DefaultResolvedGraphResults(Map<Long, Object> modulesMap) {
         this.modulesMap = modulesMap;
     }
 
     @Override
-    public Dependency getModuleDependency(long nodeId) {
-        Dependency m = modulesMap.get(nodeId);
+    public Object getModuleDependency(long nodeId) {
+        Object m = modulesMap.get(nodeId);
         if (m == null) {
             throw new IllegalArgumentException("Unable to find module dependency for id: " + nodeId);
         }

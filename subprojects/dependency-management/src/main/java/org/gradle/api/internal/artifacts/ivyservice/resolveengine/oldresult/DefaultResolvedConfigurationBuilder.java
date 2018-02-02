@@ -16,14 +16,13 @@
 
 package org.gradle.api.internal.artifacts.ivyservice.resolveengine.oldresult;
 
-import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.internal.artifacts.ivyservice.resolveengine.graph.DependencyGraphNode;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultResolvedConfigurationBuilder implements ResolvedConfigurationBuilder {
-    private final Map<Long, Dependency> modulesMap = new HashMap<Long, Dependency>();
+    private final Map<Long, Object> modulesMap = new HashMap<Long, Object>();
     private final TransientConfigurationResultsBuilder builder;
 
     public DefaultResolvedConfigurationBuilder(TransientConfigurationResultsBuilder builder) {
@@ -31,11 +30,11 @@ public class DefaultResolvedConfigurationBuilder implements ResolvedConfiguratio
     }
 
     @Override
-    public void addFirstLevelDependency(Dependency moduleDependency, DependencyGraphNode dependency) {
+    public void addFirstLevelDependency(Object moduleDependencyOrConstraint, DependencyGraphNode dependency) {
         builder.firstLevelDependency(dependency.getNodeId());
         //we don't serialise the module dependencies at this stage so we need to keep track
         //of the mapping module dependency <-> resolved dependency
-        modulesMap.put(dependency.getNodeId(), moduleDependency);
+        modulesMap.put(dependency.getNodeId(), moduleDependencyOrConstraint);
     }
 
     @Override

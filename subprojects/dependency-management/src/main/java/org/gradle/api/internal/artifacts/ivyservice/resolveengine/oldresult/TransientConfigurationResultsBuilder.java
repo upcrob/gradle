@@ -17,7 +17,6 @@
 
 package org.gradle.api.internal.artifacts.ivyservice.resolveengine.oldresult;
 
-import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.internal.artifacts.DefaultResolvedDependency;
 import org.gradle.api.internal.artifacts.DependencyGraphNodeResult;
 import org.gradle.api.internal.artifacts.ImmutableModuleIdentifierFactory;
@@ -150,7 +149,7 @@ public class TransientConfigurationResultsBuilder {
     private TransientConfigurationResults deserialize(Decoder decoder, ResolvedGraphResults graphResults, SelectedArtifactResults artifactResults, BuildOperationExecutor buildOperationProcessor) {
         Timer clock = Time.startTimer();
         Map<Long, DefaultResolvedDependency> allDependencies = new HashMap<Long, DefaultResolvedDependency>();
-        Map<Dependency, DependencyGraphNodeResult> firstLevelDependencies = new LinkedHashMap<Dependency, DependencyGraphNodeResult>();
+        Map<Object, DependencyGraphNodeResult> firstLevelDependenciesAndConstraints = new LinkedHashMap<Object, DependencyGraphNodeResult>();
         DependencyGraphNodeResult root;
         int valuesRead = 0;
         byte type = -1;
@@ -174,14 +173,14 @@ public class TransientConfigurationResultsBuilder {
                         }
                         //root should be the last entry
                         LOG.debug("Loaded resolved configuration results ({}) from {}", clock.getElapsed(), binaryStore);
-                        return new DefaultTransientConfigurationResults(root, firstLevelDependencies);
+                        return new DefaultTransientConfigurationResults(root, firstLevelDependenciesAndConstraints);
                     case FIRST_LEVEL:
                         id = decoder.readSmallLong();
                         DefaultResolvedDependency dependency = allDependencies.get(id);
                         if (dependency == null) {
                             throw new IllegalStateException(String.format("Unexpected first level id %s. Seen ids: %s", id, allDependencies.keySet()));
                         }
-                        firstLevelDependencies.put(graphResults.getModuleDependency(id), dependency);
+                        firstLevelDependenciesAndConstraints.put(graphResults.getModuleDependency(id), dependency);
                         break;
                     case EDGE:
                         long parentId = decoder.readSmallLong();

@@ -16,22 +16,21 @@
 
 package org.gradle.api.internal.artifacts.ivyservice.resolveengine.oldresult;
 
-import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.internal.artifacts.DependencyGraphNodeResult;
 
 import java.util.Map;
 
 public class DefaultTransientConfigurationResults implements TransientConfigurationResults {
-    private final Map<Dependency, DependencyGraphNodeResult> firstLevelDependencies;
+    private final Map<Object, DependencyGraphNodeResult> firstLevelDependencies;
     private final DependencyGraphNodeResult root;
 
-    public DefaultTransientConfigurationResults(DependencyGraphNodeResult root, Map<Dependency, DependencyGraphNodeResult> firstLevelDependencies) {
+    public DefaultTransientConfigurationResults(DependencyGraphNodeResult root, Map<Object, DependencyGraphNodeResult> firstLevelDependencies) {
         this.firstLevelDependencies = firstLevelDependencies;
         this.root = root;
     }
 
     @Override
-    public Map<Dependency, DependencyGraphNodeResult> getFirstLevelDependencies() {
+    public Map<Object, DependencyGraphNodeResult> getFirstLevelDependencies() {
         return firstLevelDependencies;
     }
 
