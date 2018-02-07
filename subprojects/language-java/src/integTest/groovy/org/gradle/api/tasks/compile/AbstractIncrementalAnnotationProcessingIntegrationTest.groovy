@@ -74,4 +74,15 @@ abstract class AbstractIncrementalAnnotationProcessingIntegrationTest extends Ab
         }
         out
     }
+
+    def "explicit -processor option overrides automatic detection"() {
+        buildFile << """
+            compileJava.options.compilerArgs << "-processor" << "unknown.Processor"
+        """
+        java "class A {}"
+
+        expect:
+        fails("compileJava")
+        errorOutput.contains("java.lang.ClassNotFoundException: unknown.Processor")
+    }
 }

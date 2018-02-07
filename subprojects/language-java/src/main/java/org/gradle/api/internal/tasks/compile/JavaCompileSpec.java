@@ -16,6 +16,8 @@
 
 package org.gradle.api.internal.tasks.compile;
 
+import org.gradle.api.internal.tasks.compile.processing.AnnotationProcessorDeclaration;
+
 import java.io.File;
 import java.util.List;
 
@@ -31,4 +33,8 @@ public interface JavaCompileSpec extends JvmLanguageCompileSpec {
     List<File> getAnnotationProcessorPath();
 
     void setAnnotationProcessorPath(List<File> path);
+
+    void setEffectiveAnnotationProcessors(List<AnnotationProcessorDeclaration> annotationProcessors);
+
+    List<AnnotationProcessorDeclaration> getEffectiveAnnotationProcessors();
 }

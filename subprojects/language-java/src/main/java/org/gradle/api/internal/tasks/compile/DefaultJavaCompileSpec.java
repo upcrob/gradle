@@ -16,6 +16,7 @@
 
 package org.gradle.api.internal.tasks.compile;
 
+import org.gradle.api.internal.tasks.compile.processing.AnnotationProcessorDeclaration;
 import org.gradle.api.tasks.compile.CompileOptions;
 
 import java.io.File;
@@ -24,6 +25,7 @@ import java.util.List;
 public class DefaultJavaCompileSpec extends DefaultJvmLanguageCompileSpec implements JavaCompileSpec {
     private MinimalJavaCompileOptions compileOptions;
     private List<File> annotationProcessorPath;
+    private List<AnnotationProcessorDeclaration> effectiveAnnotationProcessors;
 
     @Override
     public MinimalJavaCompileOptions getCompileOptions() {
@@ -42,5 +44,15 @@ public class DefaultJavaCompileSpec extends DefaultJvmLanguageCompileSpec implem
     @Override
     public void setAnnotationProcessorPath(List<File> annotationProcessorPath) {
         this.annotationProcessorPath = annotationProcessorPath;
+    }
+
+    @Override
+    public List<AnnotationProcessorDeclaration> getEffectiveAnnotationProcessors() {
+        return effectiveAnnotationProcessors;
+    }
+
+    @Override
+    public void setEffectiveAnnotationProcessors(List<AnnotationProcessorDeclaration> annotationProcessors) {
+        this.effectiveAnnotationProcessors = annotationProcessors;
     }
 }

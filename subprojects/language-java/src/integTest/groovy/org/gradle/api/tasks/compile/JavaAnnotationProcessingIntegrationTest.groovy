@@ -238,4 +238,19 @@ class JavaAnnotationProcessingIntegrationTest extends AbstractIntegrationSpec {
         result.output.contains(AnnotationProcessorPathFactory.PROCESSOR_PATH_DEPRECATION_MESSAGE)
     }
 
+    def "explicit -processor option overrides automatic detection"() {
+        buildFile << """
+            
+            dependencies {
+                compileOnly project(":annotation")
+                annotationProcessor project(":processor")
+            }
+            compileJava.options.compilerArgs << "-processor" << "unknown.Processor"
+        """
+
+        expect:
+        fails("compileJava")
+        errorOutput.contains("Annotation processor 'unknown.Processor' not found")
+    }
+
 }
