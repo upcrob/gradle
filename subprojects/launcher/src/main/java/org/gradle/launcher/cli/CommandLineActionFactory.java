@@ -58,6 +58,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 /**
  * <p>Responsible for converting a set of command-line arguments into a {@link Runnable} action.</p>
@@ -65,6 +66,7 @@ import java.util.Map;
 public class CommandLineActionFactory {
     private static final String HELP = "h";
     private static final String VERSION = "v";
+	private static final String CLEANCACHE = "C";
 
     private final BuildLayoutFactory buildLayoutFactory = new BuildLayoutFactory();
 
@@ -115,6 +117,7 @@ public class CommandLineActionFactory {
         public void configureCommandLineParser(CommandLineParser parser) {
             parser.option(HELP, "?", "help").hasDescription("Shows this help message.");
             parser.option(VERSION, "version").hasDescription("Print version info.");
+			parser.option(CLEANCACHE, "cleancache").hasDescription("Cleans the local Gradle cache.").hasArgument(Integer.class);
         }
 
         public Runnable createAction(CommandLineParser parser, ParsedCommandLine commandLine) {
@@ -124,6 +127,9 @@ public class CommandLineActionFactory {
             if (commandLine.hasOption(VERSION)) {
                 return new ShowVersionAction();
             }
+			if (commandLine.hasOption(CLEANCACHE)) {
+				return new CleanCacheAction(Integer.parseInt(commandLine.option(CLEANCACHE).getValue()));
+			}
             return null;
         }
     }
@@ -181,6 +187,20 @@ public class CommandLineActionFactory {
             System.out.println(String.format(sb.toString()));
         }
     }
+
+	private static class CleanCacheAction implements Runnable {
+		private int daysToKeep;
+
+		CleanCacheAction(int daysToKeep) {
+			this.daysToKeep = daysToKeep;
+		}
+
+		@Override
+	    public void run() {
+			CacheCleaningService cleaner = new CacheCleaningService();
+			cleaner.cleanCache(LocalDateTime.now().minusDays(daysToKeep));
+	    }
+	}
 
     private static class WithLogging implements Action<ExecutionListener> {
         private final ServiceRegistry loggingServices;
